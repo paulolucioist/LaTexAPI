@@ -11,6 +11,7 @@ RUN apt-get update && \
         texlive-latex-extra \
         texlive-fonts-recommended \
         texlive-lang-portuguese \
+        texlive-lang-other \
         latexmk \
         make \
         git \
