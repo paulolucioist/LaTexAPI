@@ -23,8 +23,12 @@ RUN apt-get update && \
         make && \
     printf '%s\n' \
         'selected_scheme scheme-small' \
-        'TEXLIVE_INSTALL_PREFIX /usr/local/texlive' \
-        'TEXLIVE_YEAR 2024' \
+        'TEXDIR /usr/local/texlive/2024' \
+        'TEXMFLOCAL /usr/local/texlive/texmf-local' \
+        'TEXMFSYSCONFIG /usr/local/texlive/2024/texmf-config' \
+        'TEXMFSYSVAR /usr/local/texlive/2024/texmf-var' \
+        'TEXMFVAR ~/.texlive2024/texmf-var' \
+        'TEXMFCONFIG ~/.texlive2024/texmf-config' \
         'binary_x86_64-linux 1' \
         'instopt_adjustpath 0' \
         'instopt_letter 0' \
