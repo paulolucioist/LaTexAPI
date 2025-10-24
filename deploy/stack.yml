@@ -32,6 +32,7 @@ services:
         - "traefik.http.routers.traefik.rule=Host(`traefiklatexapi.entryprep.com`)"
         - "traefik.http.routers.traefik.entrypoints=websecure"
         - "traefik.http.routers.traefik.tls.certresolver=le"
+        - "traefik.http.routers.traefik.service=api@internal"
         - "traefik.http.services.traefik.loadbalancer.server.port=8080"
         - "traefik.http.middlewares.traefik-auth.basicauth.usersfile=/run/secrets/traefik_dashboard_users"
         - "traefik.http.routers.traefik.middlewares=traefik-auth"
