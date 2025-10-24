@@ -18,7 +18,7 @@ RUN apt-get update && \
         wget \
         latexmk \
         make && \
-    cat <<'EOF' >/tmp/texlive.profile
+    cat <<'EOF' >/tmp/texlive.profile && \
 selected_scheme scheme-small
 TEXLIVE_INSTALL_PREFIX /usr/local/texlive
 TEXLIVE_YEAR 2024
@@ -28,7 +28,7 @@ instopt_letter 0
 instopt_portable 0
 instopt_write18_restricted 1
 EOF
-    && mkdir -p /tmp/install-tl && \
+    mkdir -p /tmp/install-tl && \
     curl -sSL http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz | \
         tar -xz -C /tmp/install-tl --strip-components=1 && \
     /tmp/install-tl/install-tl --profile=/tmp/texlive.profile && \
