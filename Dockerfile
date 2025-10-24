@@ -10,6 +10,7 @@ RUN apt-get update && \
         texlive-latex-base \
         texlive-latex-extra \
         texlive-fonts-recommended \
+        texlive-lang-portuguese \
         latexmk \
         make \
         git \
