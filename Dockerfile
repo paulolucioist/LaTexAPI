@@ -43,17 +43,13 @@ RUN apt-get update && \
     $TEXLIVE_BIN_DIR/tlmgr update --self && \
     $TEXLIVE_BIN_DIR/tlmgr install \
         latexmk \
-        babel-portuguese \
-        amsmath \
-        amssymb \
-        mathtools \
+        babel-portuges \
         geometry \
         booktabs \
         siunitx \
         pgf \
         xcolor \
-        beamer \
-        lmodern && \
+        beamer && \
     $TEXLIVE_BIN_DIR/fmtutil-sys --all && \
     rm -rf /tmp/install-tl /tmp/texlive.profile && \
     apt-get clean && \
