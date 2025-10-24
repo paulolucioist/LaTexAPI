@@ -14,7 +14,7 @@ API enxuta para receber fonte LaTeX e devolver PDF em Base64. O objetivo é serv
    source .venv/bin/activate
    pip install -e .[dev]
    ```
-2. Garanta que `latexmk` ou `pdflatex` esteja disponível no PATH. A imagem oficial usa TeX Live 2024 (install-tl) com um conjunto enxuto de pacotes (`latexmk`, `babel-portuges`, `geometry`, `booktabs`, `siunitx`, `pgf`/TikZ, `xcolor`, `beamer`, etc.).
+2. Garanta que `latexmk` ou `pdflatex` esteja disponível no PATH. A imagem oficial usa TeX Live 2024 (install-tl) com um conjunto enxuto de pacotes (`latexmk`, `babel-portuges` com alias para `portuguese`, `geometry`, `booktabs`, `siunitx`, `pgf`/TikZ, `xcolor`, `beamer`, etc.).
 3. Execute localmente:
    ```bash
    uvicorn app.main:app --reload

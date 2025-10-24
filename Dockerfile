@@ -50,6 +50,10 @@ RUN apt-get update && \
         pgf \
         xcolor \
         beamer && \
+    PORTUGES_LDF="$($TEXLIVE_BIN_DIR/kpsewhich portuges.ldf)" && \
+    mkdir -p /usr/local/texlive/texmf-local/tex/generic/babel && \
+    cp "$PORTUGES_LDF" /usr/local/texlive/texmf-local/tex/generic/babel/portuguese.ldf && \
+    $TEXLIVE_BIN_DIR/mktexlsr /usr/local/texlive/texmf-local && \
     $TEXLIVE_BIN_DIR/fmtutil-sys --all && \
     rm -rf /tmp/install-tl /tmp/texlive.profile && \
     apt-get clean && \
