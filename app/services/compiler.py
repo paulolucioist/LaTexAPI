@@ -14,6 +14,10 @@ from app.models.schemas import CompileRequest, CompileResponse
 class CompilationError(RuntimeError):
     """Erro controlado durante compilação de documentos."""
 
+    def __init__(self, message: str, log: str | None = None) -> None:
+        super().__init__(message)
+        self.log = log
+
 
 def _sanitize_filename(filename: str) -> str:
     stem = Path(filename).stem or "document"
@@ -70,6 +74,7 @@ def compile_document(request: CompileRequest) -> CompileResponse:
 
         compile_log = ""
         last_error: str | None = None
+        last_log: str | None = None
 
         for command in _build_commands(tex_path.name):
             try:
@@ -94,14 +99,18 @@ def compile_document(request: CompileRequest) -> CompileResponse:
             except subprocess.CalledProcessError as exc:
                 compile_log = (exc.stdout or "") + (exc.stderr or "")
                 last_error = "Compilação LaTeX falhou. Consulte o log retornado."
+                last_log = compile_log
                 continue
         else:
             error_message = last_error or "Falha desconhecida ao compilar o documento."
-            raise CompilationError(error_message)
+            raise CompilationError(error_message, log=last_log)
 
         pdf_path = tex_path.with_suffix(".pdf")
         if not pdf_path.exists():
-            raise CompilationError("Arquivo PDF não foi gerado pela compilação.")
+            raise CompilationError(
+                "Arquivo PDF não foi gerado pela compilação.",
+                log=compile_log,
+            )
 
         pdf_bytes = pdf_path.read_bytes()
         encoded_pdf = base64.b64encode(pdf_bytes).decode("ascii")

@@ -59,6 +59,8 @@ services:
 
   portainer:
     image: portainer/portainer-ce:latest
+    command:
+      - "--admin-password-file=/run/secrets/portainer_admin_password"
     ports:
       - target: 9000
         published: 9000
@@ -78,6 +80,8 @@ services:
         - "traefik.http.services.portainer.loadbalancer.server.port=9000"
     networks:
       - edge
+    secrets:
+      - portainer_admin_password
 
 networks:
   edge:
@@ -89,4 +93,6 @@ volumes:
 
 secrets:
   traefik_dashboard_users:
+    external: true
+  portainer_admin_password:
     external: true

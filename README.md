@@ -90,6 +90,11 @@ Resposta típica:
    ```bash
    htpasswd -nb admin 'senha-segura' | docker secret create traefik_dashboard_users -
    ```
+4. (Opcional) Defina senha do usuário admin do Portainer via secret:
+   ```bash
+   htpasswd -nB admin 'senha-portainer' | cut -d: -f2 | \
+     docker secret create portainer_admin_password -
+   ```
 3. Envie a stack:
    ```bash
    docker stack deploy -c deploy/stack.yml latexapi
@@ -99,6 +104,7 @@ Resposta típica:
 ### Portainer (opcional)
 - O stack inclui Portainer CE como interface gráfica. Caso não queira, remova o serviço `portainer` do `deploy/stack.yml`.
 - Acesse via `https://portainerlatexapi.entryprep.com` (traefik aplicará TLS). Configure usuários adicionais dentro do Portainer.
+- Para pular a tela inicial de criação de usuário, gere o secret `portainer_admin_password` conforme o passo anterior; o login será `admin` com a senha escolhida.
 
 ### Dados ainda necessários
 - **LATEXAPI_IMAGE**: referência da imagem publicada no registro (ex.: `ghcr.io/seu-usuario/latexapi:0.1.0`).

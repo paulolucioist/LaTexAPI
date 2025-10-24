@@ -15,6 +15,7 @@ dist/
 # Editors
 .idea/
 .vscode/
+.DS_Store
 
 # Runtime artifacts
 *.log

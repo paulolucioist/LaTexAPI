@@ -19,6 +19,9 @@ async def compile_endpoint(payload: CompileRequest) -> CompileResponse:
     try:
         compilation = compile_document(payload)
     except CompilationError as exc:
-        raise HTTPException(status_code=400, detail=str(exc))
+        detail: dict[str, str] = {"message": str(exc)}
+        if payload.return_log and getattr(exc, "log", None):
+            detail["log"] = exc.log  # type: ignore[assignment]
+        raise HTTPException(status_code=400, detail=detail)
 
     return compilation
