@@ -18,6 +18,13 @@
    ```bash
    git pull
    ```
+2. **Atualizar servidor a partir do GitHub**
+   ```bash
+   ssh root@servidor
+   cd ~/LaTexAPI
+   git pull
+   ```
+   (Depois refaça `docker build`/`docker stack deploy` conforme abaixo.)
 2. **Após modificar arquivos**
    ```bash
    git status
