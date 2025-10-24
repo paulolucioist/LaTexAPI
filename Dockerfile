@@ -27,8 +27,8 @@ RUN apt-get update && \
         'TEXMFLOCAL /usr/local/texlive/texmf-local' \
         'TEXMFSYSCONFIG /usr/local/texlive/2024/texmf-config' \
         'TEXMFSYSVAR /usr/local/texlive/2024/texmf-var' \
-        'TEXMFVAR ~/.texlive2024/texmf-var' \
-        'TEXMFCONFIG ~/.texlive2024/texmf-config' \
+        'TEXMFCONFIG /usr/local/texlive/2024/texmf-config' \
+        'TEXMFVAR /usr/local/texlive/2024/texmf-var' \
         'binary_x86_64-linux 1' \
         'instopt_adjustpath 0' \
         'instopt_letter 0' \
@@ -42,13 +42,19 @@ RUN apt-get update && \
     $TEXLIVE_BIN_DIR/tlmgr option repository ${TL_MIRROR} && \
     $TEXLIVE_BIN_DIR/tlmgr update --self && \
     $TEXLIVE_BIN_DIR/tlmgr install \
-        collection-latexrecommended \
-        collection-fontsrecommended \
-        collection-langportuguese \
-        collection-latexextra \
-        collection-pictures \
-        collection-mathscience \
-        beamer && \
+        latexmk \
+        babel-portuguese \
+        amsmath \
+        amssymb \
+        mathtools \
+        geometry \
+        booktabs \
+        siunitx \
+        pgf \
+        xcolor \
+        beamer \
+        lmodern && \
+    $TEXLIVE_BIN_DIR/fmtutil-sys --all && \
     rm -rf /tmp/install-tl /tmp/texlive.profile && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
