@@ -21,14 +21,12 @@ WORKDIR /app
 
 # Copia definição de dependências e instala em modo virtualenv isolado.
 COPY pyproject.toml ./
+COPY app ./app
 RUN python -m venv /.venv && \
     /.venv/bin/pip install --upgrade pip && \
     /.venv/bin/pip install .
 
 ENV PATH="/.venv/bin:${PATH}"
-
-# Copia código fonte.
-COPY app ./app
 
 EXPOSE 8000
 
