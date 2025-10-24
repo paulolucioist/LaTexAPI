@@ -1,0 +1,10 @@
+.venv
+__pycache__/
+*.pyc
+*.pyo
+*.pdf
+*.log
+.git
+.gitignore
+tests/
+LatexAPI – Blueprint Inicial.md

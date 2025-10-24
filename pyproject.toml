@@ -1,0 +1,25 @@
+[project]
+name = "latexapi"
+version = "0.1.0"
+description = "API enxuta para compilação de LaTeX para PDF usando FastAPI."
+authors = [{ name = "LatexAPI Team" }]
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.110,<1.0",
+    "pydantic>=2.6,<3.0",
+    "uvicorn[standard]>=0.29,<1.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4,<8.0",
+    "httpx>=0.26,<0.28",
+]
+
+[build-system]
+requires = ["setuptools>=67.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["app"]
+namespaces = false

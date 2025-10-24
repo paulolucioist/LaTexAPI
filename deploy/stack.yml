@@ -1,0 +1,90 @@
+version: "3.9"
+
+services:
+  reverse-proxy:
+    image: traefik:v2.10
+    command:
+      - "--providers.docker.swarmmode=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.le.acme.httpchallenge=true"
+      - "--certificatesresolvers.le.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.le.acme.email=paulo.lucio.ist@gmail.com"
+      - "--certificatesresolvers.le.acme.storage=/letsencrypt/acme.json"
+    ports:
+      - target: 80
+        published: 80
+        mode: host
+      - target: 443
+        published: 443
+        mode: host
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "traefik_letsencrypt:/letsencrypt"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.traefik.rule=Host(`traefiklatexapi.entryprep.com`)"
+        - "traefik.http.routers.traefik.entrypoints=websecure"
+        - "traefik.http.routers.traefik.tls.certresolver=le"
+        - "traefik.http.services.traefik.loadbalancer.server.port=8080"
+        - "traefik.http.middlewares.traefik-auth.basicauth.usersfile=/run/secrets/traefik_dashboard_users"
+        - "traefik.http.routers.traefik.middlewares=traefik-auth"
+    networks:
+      - edge
+    secrets:
+      - traefik_dashboard_users
+
+  latexapi:
+    image: ${LATEXAPI_IMAGE:-latexapi:latest}
+    deploy:
+      replicas: 2
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.latexapi.rule=Host(`latexapi.entryprep.com`)"
+        - "traefik.http.routers.latexapi.entrypoints=websecure"
+        - "traefik.http.routers.latexapi.tls.certresolver=le"
+        - "traefik.http.services.latexapi.loadbalancer.server.port=8000"
+        - "traefik.http.middlewares.latexapi-ratelimit.ratelimit.average=20"
+        - "traefik.http.middlewares.latexapi-ratelimit.ratelimit.burst=40"
+        - "traefik.http.routers.latexapi.middlewares=latexapi-ratelimit"
+    networks:
+      - edge
+
+  portainer:
+    image: portainer/portainer-ce:latest
+    ports:
+      - target: 9000
+        published: 9000
+        mode: host
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock"
+      - "portainer_data:/data"
+    deploy:
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.portainer.rule=Host(`portainerlatexapi.entryprep.com`)"
+        - "traefik.http.routers.portainer.entrypoints=websecure"
+        - "traefik.http.routers.portainer.tls.certresolver=le"
+        - "traefik.http.services.portainer.loadbalancer.server.port=9000"
+    networks:
+      - edge
+
+networks:
+  edge:
+    driver: overlay
+
+volumes:
+  traefik_letsencrypt:
+  portainer_data:
+
+secrets:
+  traefik_dashboard_users:
+    external: true

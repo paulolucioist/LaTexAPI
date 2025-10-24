@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+.venv/
+env/
+venv/
+
+# Builds / Dist
+build/
+dist/
+*.egg-info/
+
+# Editors
+.idea/
+.vscode/
+
+# Runtime artifacts
+*.log
+*.pdf
+*.aux
+*.fls
+*.fdb_latexmk
+*.out
