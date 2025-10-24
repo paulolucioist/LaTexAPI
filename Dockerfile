@@ -1,11 +1,14 @@
 FROM python:3.11-slim-bookworm AS base
 
+ARG TL_MIRROR=https://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2024/tlnet-final
+
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
     TEXLIVE_YEAR=2024 \
     TEXLIVE_INSTALL_DIR=/usr/local/texlive/2024 \
-    TEXLIVE_BIN_DIR=/usr/local/texlive/2024/bin/x86_64-linux
+    TEXLIVE_BIN_DIR=/usr/local/texlive/2024/bin/x86_64-linux \
+    TL_MIRROR=${TL_MIRROR}
 
 # Instala dependências base, TeX Live 2024 (via install-tl) e pacotes necessários.
 RUN apt-get update && \
@@ -16,7 +19,7 @@ RUN apt-get update && \
         ghostscript \
         perl \
         wget \
-        latexmk \
+        xz-utils \
         make && \
     printf '%s\n' \
         'selected_scheme scheme-small' \
@@ -29,10 +32,10 @@ RUN apt-get update && \
         'instopt_write18_restricted 1' \
         > /tmp/texlive.profile && \
     mkdir -p /tmp/install-tl && \
-    curl -sSL http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz | \
+    curl -sSL ${TL_MIRROR}/install-tl-unx.tar.gz | \
         tar -xz -C /tmp/install-tl --strip-components=1 && \
-    /tmp/install-tl/install-tl --profile=/tmp/texlive.profile && \
-    $TEXLIVE_BIN_DIR/tlmgr option repository http://mirror.ctan.org/systems/texlive/tlnet && \
+    /tmp/install-tl/install-tl --repository ${TL_MIRROR} --profile=/tmp/texlive.profile && \
+    $TEXLIVE_BIN_DIR/tlmgr option repository ${TL_MIRROR} && \
     $TEXLIVE_BIN_DIR/tlmgr update --self && \
     $TEXLIVE_BIN_DIR/tlmgr install \
         collection-latexrecommended \
