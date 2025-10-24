@@ -18,13 +18,6 @@
    ```bash
    git pull
    ```
-2. **Atualizar servidor a partir do GitHub**
-   ```bash
-   ssh root@servidor
-   cd ~/LaTexAPI
-   git pull
-   ```
-   (Depois refaça `docker build`/`docker stack deploy` conforme abaixo.)
 2. **Após modificar arquivos**
    ```bash
    git status
@@ -35,14 +28,20 @@
    ```bash
    git push origin main
    ```
-4. **Redeploy da LatexAPI**
+4. **Atualizar servidor a partir do GitHub**
+   ```bash
+   ssh root@servidor
+   cd ~/LaTexAPI
+   git pull
+   ```
+5. **Redeploy da LatexAPI**
    ```bash
    docker build --pull --no-cache -t latexapi:latest .
    export TRAEFIK_ACME_EMAIL="paulo.lucio.ist@gmail.com"
    export LATEXAPI_IMAGE="latexapi:latest"
    docker stack deploy -c deploy/stack.yml latexapi
    ```
-5. **Testes rápidos**
+6. **Testes rápidos**
    ```bash
    docker exec -it $(docker ps --filter name=latexapi_latexapi -q | head -n 1) kpsewhich portuguese.ldf
    curl https://latexapi.entryprep.com/compile \
